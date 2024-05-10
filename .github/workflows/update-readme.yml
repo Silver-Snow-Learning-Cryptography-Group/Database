@@ -1,0 +1,39 @@
+name: Update README
+
+on:
+  push:
+    branches:
+      - main # 或者你的默认分支名
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # 确保完整地检出仓库
+
+      - name: Install tree
+        run: sudo apt-get install tree
+
+      - name: Generate directory structure
+        run: tree -d -L 2 > DIRECTORY.md # 生成目录结构并保存到 DIRECTORY.md
+
+      - name: Update README
+        run: |
+          echo "# Repository Contents" > README.md
+          echo "Below is the directory structure of this repository:" >> README.md
+          cat DIRECTORY.md >> README.md
+
+      - name: Commit and push if necessary
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add README.md
+          git commit -m "Update README with directory structure" || exit 0  # 如果没有变化就退出
+          git push
