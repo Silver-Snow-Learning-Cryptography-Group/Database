@@ -23,12 +23,14 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
 
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.8"
+
       - name: Update README
         run: |
-          echo "Updating README"
-          # Here you would add your script or command to update the README
-          # For example:
-          # python update_readme.py
+          python scripts/update_readme.py
 
       - name: Commit and push if there are changes
         run: |
