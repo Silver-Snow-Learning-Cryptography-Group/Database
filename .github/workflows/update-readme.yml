@@ -1,39 +1,37 @@
-name: Update README
+name: Update README Workflow
 
 on:
   push:
     branches:
-      - main # 或者你的默认分支名
-  pull_request:
-    branches:
-      - main
+      - main # Trigger the workflow on push events to the main branch
+  schedule:
+    - cron: "0 0 * * *" # Optionally, schedule to run automatically once a day
 
 jobs:
   update-readme:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest # Specifies the runner environment
+
+    permissions:
+      contents: write # This gives the workflow write access to the repository
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0 # 确保完整地检出仓库
+      - name: Checkout code
+        uses: actions/checkout@v3 # Checks out your repository under $GITHUB_WORKSPACE
 
-      - name: Install tree
-        run: sudo apt-get install tree
-
-      - name: Generate directory structure
-        run: tree -d -L 2 > DIRECTORY.md # 生成目录结构并保存到 DIRECTORY.md
-
-      - name: Update README
-        run: |
-          echo "# Repository Contents" > README.md
-          echo "Below is the directory structure of this repository:" >> README.md
-          cat DIRECTORY.md >> README.md
-
-      - name: Commit and push if necessary
+      - name: Set up Git config
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
+
+      - name: Update README
+        run: |
+          echo "Updating README"
+          # Here you would add your script or command to update the README
+          # For example:
+          # python update_readme.py
+
+      - name: Commit and push if there are changes
+        run: |
           git add README.md
-          git commit -m "Update README with directory structure" || exit 0  # 如果没有变化就退出
+          git commit -m "Update README with directory structure" -a || echo "No changes to commit"
           git push
