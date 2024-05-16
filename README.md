@@ -3,7 +3,7 @@
 ```
 +-- Books/
 |   +-- Deep Learning/
-|   |   +-- UnderstandingDeepLearning.pdf
+|   |   +-- Understanding DeepLearning.pdf
 |   +-- Operating System/
 |   |   +-- Operating Systems - Three Easy Pieces.pdf
 |   +-- Software Development/
